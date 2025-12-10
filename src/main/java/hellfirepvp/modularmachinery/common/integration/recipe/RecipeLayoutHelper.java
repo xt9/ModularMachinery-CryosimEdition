@@ -34,7 +34,7 @@ public class RecipeLayoutHelper {
     public static void init() {
         if(PART_TANK_SHELL != null) return;
 
-        PART_TANK_SHELL               = new RecipePart(LOCATION_JEI_ICONS, 0,  0, 22, 63);
+        PART_TANK_SHELL               = new RecipePart(LOCATION_JEI_ICONS, 0,  0, 18, 18);
         PART_ENERGY_FOREGROUND        = new RecipePart(LOCATION_JEI_ICONS, 22, 0, 22, 63);
         PART_ENERGY_BACKGROUND        = new RecipePart(LOCATION_JEI_ICONS, 44, 0, 22, 63);
         PART_INVENTORY_CELL           = new RecipePart(LOCATION_JEI_ICONS, 66, 0, 18, 18);

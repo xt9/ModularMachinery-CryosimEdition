@@ -9,7 +9,6 @@
 package hellfirepvp.modularmachinery.common.integration.ingredient;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.base.Mods;
 import hellfirepvp.modularmachinery.common.integration.ModIntegrationJEI;
 import mekanism.api.gas.GasStack;
@@ -65,7 +64,19 @@ public class HybridFluidRenderer<T extends HybridFluid> implements IIngredientRe
         if(fluidRenderer == null) {
             fluidRenderer = ModIntegrationJEI.ingredientRegistry.getIngredientRenderer(FluidStack.class);
         }
-        fluidRenderer.render(minecraft, xPosition, yPosition, ingredient == null ? null : ingredient.asFluidStack());
+
+        HybridFluid fluid = null;
+        if(ingredient != null) {
+            // always render a full square
+            fluid = ingredient.copy();
+            fluid.setAmount(1000);
+        }
+        fluidRenderer.render(
+            minecraft,
+            xPosition,
+            yPosition,
+                fluid == null ? null : fluid.asFluidStack()
+        );
     }
 
     @Optional.Method(modid = "mekanism")
