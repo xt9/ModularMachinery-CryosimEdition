@@ -1,18 +1,14 @@
-import net.minecraftforge.gradle.common.task.SignJar
-
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        mavenCentral()
+        maven { url = "https://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
+apply plugin: 'net.minecraftforge.gradle.forge'
+//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 version = "1.12.2-1.11.1"
 group = "hellfirepvp.modularmachinery"
@@ -25,26 +21,22 @@ if (System.getenv("BUILD_NUMBER") != null) {
     build_version = version + "-v" + System.getenv("BUILD_NUMBER")
 }
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
 
 minecraft {
+    version = "1.12.2-14.23.5.2847"
+    runDir = "run"
 
-    mappings channel: 'snapshot', version: '20171003-1.12'
-
-    runs {
-        client {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'info'
-        }
-
-        server {
-
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'info'
-        }
-    }
+    // the mappings can be changed at any time, and must be in the following format.
+    // snapshot_YYYYMMDD   snapshot are built nightly.
+    // stable_#            stables are built at the discretion of the MCP team.
+    // Use non-default mappings at your own risk. they may not always work.
+    // simply re-run your setup task after changing the mappings to update your workspace.
+    mappings = "snapshot_20171003"
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
 repositories {
@@ -77,52 +69,45 @@ repositories {
         // Curseforge
         url "https://minecraft.curseforge.com/api/maven"
     }
-
+    maven {
+        name 'Cleanroom Maven'
+        url 'https://maven.cleanroommc.com'
+    }
+    maven {
+        name 'GTNH Maven'
+        url 'https://nexus.gtnewhorizons.com/repository/public/'
+    }
+    maven {
+        url = "https://maven.neoforged.net/releases/"
+    }
+    maven {
+        url 'https://cfa2.cursemaven.com'
+    }
+    maven {
+        url 'https://cursemaven.com'
+    }
 }
 
 dependencies {
+    compileOnly "mezz.jei:jei_1.12.2:4.16.1.1013"
+    runtimeOnly "mezz.jei:jei_1.12.2:4.16.1.1013"
 
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
+    compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+"
+    compileOnly "curse.maven:RedstoneFlux-270789:2920436"
+    compileOnly "curse.maven:Mekanism-268560:2835175"
+    compileOnly "curse.maven:industrialcraft-2-242638:3078604"
+    compileOnly "curse.maven:CodeChickenLib-242818:2779848"
+    compileOnly "curse.maven:brandonscore-231382:3051539"
+    compileOnly "curse.maven:draconicevolution-223565:3051542"
 
-    compileOnly fg.deobf('mezz.jei:jei_1.12.2:4.14.4.267')
-    runtimeOnly fg.deobf('mezz.jei:jei_1.12.2:4.14.4.267')
-
-    compileOnly fg.deobf('cofh:RedstoneFlux:1.12-2.1.0.7:universal')
-    runtimeOnly fg.deobf('cofh:RedstoneFlux:1.12-2.1.0.7:universal')
-
-    compileOnly fg.deobf('CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.14.520')
-    runtimeOnly fg.deobf('CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.14.520')
-
-    deobf group: 'codechicken', name: 'CodeChickenLib', version: '1.12.2-3.2.2.353', classifier: 'universal'
-    deobf group: 'com.brandon3055.brandonscore', name: 'BrandonsCore', version: '1.12.2-2.4.9.195', classifier: 'universal'
-    deobf group: 'com.brandon3055.draconicevolution', name: 'Draconic-Evolution', version: '1.12.2-2.3.18.329', classifier: 'universal'
-
-    deobf "gregtechce:gregtech:1.12.2:1.5.21.182"
+    compileOnly "curse.maven:gregtech-ce-unofficial-557242:3859788"
 
 }
+
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
-
-//Sign jar from flatfile if present
-task signJar(type: SignJar, dependsOn: jar) {
-    onlyIf {
-        project.hasProperty('keyStore')
-    }
-    if (project.hasProperty('keyStore')) {
-        keyStore = project.keyStore
-        alias = project.alias
-        storePass = project.storePass
-        keyPass = project.keyPass
-        inputFile = jar.archivePath
-        outputFile = jar.archivePath
-    } else {
-        logger.warn("No key store found, not signing the output jar\n")
-    }
-}
-
-build.dependsOn signJar
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
@@ -152,28 +137,4 @@ task srcJar(type: Jar) {
 
 artifacts {
     archives deobfJar, srcJar
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version build_version
-            from components.java
-
-            artifact deobfJar {
-                classifier 'deobf'
-            }
-            artifact srcJar {
-                classifier 'sources'
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            url "file://" + System.getenv("LOCAL_MAVEN")
-        }
-    }
 }
