@@ -61,9 +61,6 @@ tooltip.machinery.chance.out=Production Chance: %s
 tooltip.machinery.chance.in.never=Doesn't get consumed.
 tooltip.machinery.chance.out.never=Is never produced.
 
-tooltip.machinery.energy.in=Required Energy:
-tooltip.machinery.energy.in.tick=Per Tick: %s %s/t
-tooltip.machinery.energy.in.total=Total: %s %s
 tooltip.machinery.energy.out=Produced Energy:
 tooltip.machinery.energy.out.tick=Per Tick: %s %s/t
 tooltip.machinery.energy.out.total=Total: %s %s

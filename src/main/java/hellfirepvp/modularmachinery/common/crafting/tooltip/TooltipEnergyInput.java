@@ -18,9 +18,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -52,12 +54,11 @@ public class TooltipEnergyInput extends RequirementTip {
         }
         List<String> tooltip = new ArrayList<>();
         if (totalEnergyIn > 0) {
-            String energyType = I18n.format(EnergyDisplayUtil.type.getUnlocalizedFormat());
             long energyIn = EnergyDisplayUtil.type.formatEnergyForDisplay(totalEnergyIn);
+            String energyType = I18n.format(EnergyDisplayUtil.type.getUnlocalizedFormat());
 
-            tooltip.add(I18n.format("tooltip.machinery.energy.in"));
-            tooltip.add(I18n.format("tooltip.machinery.energy.in.tick", energyIn, energyType));
-            tooltip.add(I18n.format("tooltip.machinery.energy.in.total", energyIn * recipe.getRecipeTotalTickTime(), energyType));
+            String formattedEnergy = NumberFormat.getInstance(Locale.US).format(energyIn);
+            tooltip.add("Consumes " + formattedEnergy + " " + energyType + "/t");
         }
         return tooltip;
     }

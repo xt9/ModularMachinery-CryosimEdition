@@ -12,13 +12,17 @@ import hellfirepvp.modularmachinery.client.util.EnergyDisplayUtil;
 import hellfirepvp.modularmachinery.common.crafting.MachineRecipe;
 import hellfirepvp.modularmachinery.common.crafting.helper.ComponentRequirement;
 import hellfirepvp.modularmachinery.common.crafting.requirement.RequirementEnergy;
+import hellfirepvp.modularmachinery.common.crafting.requirement.RequirementFluid;
+import hellfirepvp.modularmachinery.common.crafting.requirement.RequirementItem;
 import hellfirepvp.modularmachinery.common.machine.IOType;
 import net.minecraft.client.resources.I18n;
 
 import javax.annotation.Nonnull;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -48,12 +52,11 @@ public class TooltipEnergyOutput extends RequirementTip {
         }
         List<String> tooltip = new ArrayList<>();
         if (totalEnergyOut > 0) {
+            long energyOut = EnergyDisplayUtil.type.formatEnergyForDisplay(totalEnergyOut);
             String energyType = I18n.format(EnergyDisplayUtil.type.getUnlocalizedFormat());
-            long energyIn = EnergyDisplayUtil.type.formatEnergyForDisplay(totalEnergyOut);
 
-            tooltip.add(I18n.format("tooltip.machinery.energy.out"));
-            tooltip.add(I18n.format("tooltip.machinery.energy.out.tick", energyIn, energyType));
-            tooltip.add(I18n.format("tooltip.machinery.energy.out.total", energyIn * recipe.getRecipeTotalTickTime(), energyType));
+            String formattedEnergy = NumberFormat.getInstance(Locale.US).format(energyOut);
+            tooltip.add("Produces " + formattedEnergy + " " + energyType + "/t");
         }
         return tooltip;
     }

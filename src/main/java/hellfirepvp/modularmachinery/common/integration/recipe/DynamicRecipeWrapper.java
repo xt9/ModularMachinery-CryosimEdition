@@ -86,7 +86,7 @@ public class DynamicRecipeWrapper implements IRecipeWrapper {
                 .createDrawable(RecipeLayoutHelper.LOCATION_JEI_ICONS, 84, 15, pxPart, RecipeLayoutHelper.PART_PROCESS_ARROW_ACTIVE.zSize)
                 .draw(minecraft, recipeCategory.rectangleProcessArrow.x, recipeCategory.rectangleProcessArrow.y);
 
-        int offsetY = recipeCategory.realHeight;
+        int offsetY = recipeCategory.realHeight + 3;
 
         int lineHeight = RequirementTip.LINE_HEIGHT;
         int splitHeight = RequirementTip.SPLIT_HEIGHT;

@@ -96,17 +96,17 @@ public abstract class RecipeLayoutPart<T> {
 
         @Override
         public int getComponentHorizontalGap() {
-            return 2;
+            return 1;
         }
 
         @Override
         public int getComponentVerticalGap() {
-            return 2;
+            return 0;
         }
 
         @Override
         public int getMaxHorizontalCount() {
-            return 3;
+            return 1;
         }
 
         @Override
@@ -167,12 +167,12 @@ public abstract class RecipeLayoutPart<T> {
 
         @Override
         public int getComponentWidth() {
-            return 22;
+            return 18;
         }
 
         @Override
         public int getComponentHeight() {
-            return 63;
+            return 54;
         }
 
         @Override
@@ -187,12 +187,12 @@ public abstract class RecipeLayoutPart<T> {
 
         @Override
         public int getComponentHorizontalGap() {
-            return 2;
+            return 1;
         }
 
         @Override
         public int getComponentVerticalGap() {
-            return 2;
+            return 1;
         }
 
         @Override
